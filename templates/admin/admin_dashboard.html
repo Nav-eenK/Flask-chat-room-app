@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard | ChatApp</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2>ChatApp</h2>
+        <ul>
+            <li class="active">Dashboard</li>
+            <li>Users</li>
+            <li>Rooms</li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <!-- Top Bar -->
+        <header class="topbar">
+            <h1>Admin Dashboard</h1>
+            <span>Welcome, Admin</span>
+        </header>
+
+        <!-- Stats -->
+        <section class="stats">
+            <div class="card">
+                <h3>Total Users</h3>
+                <p>{{ users|length }}</p>
+            </div>
+            <div class="card">
+                <h3>Total Rooms</h3>
+                <p>{{ rooms|length }}</p>
+            </div>
+            <div class="card">
+                <h3>Active Users</h3>
+                <p>{{ active_users }}</p>
+            </div>
+        </section>
+
+        <!-- Users Table -->
+        <section class="table-section">
+            <h2>Users</h2>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Status</th>
+                </tr>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>
+                        <span class="{{ 'online' if user.active else 'offline' }}">
+                            {{ 'Online' if user.active else 'Offline' }}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+
+        <!-- Rooms Table -->
+        <section class="table-section">
+            <h2>Chat Rooms</h2>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>Created By</th>
+                </tr>
+                {% for room in rooms %}
+                <tr>
+                    <td>{{ room.id }}</td>
+                    <td>{{ room.room_name }}</td>
+                    <td>{{ room.room_code }}</td>
+                    <td>{{ room.created_by }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+
+    </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login | ChatApp</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_login.css') }}">
+</head>
+<body>
+
+<div class="login-wrapper">
+
+    <!-- Left Info Panel -->
+    <div class="login-info">
+        <h1>ChatApp Admin</h1>
+        <p>Secure access to manage users, rooms, and activity.</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="login-card">
+        <h2>Admin Login</h2>
+
+        <form method="POST">
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Enter admin username" required>
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter password" required>
+            </div>
+
+            <button type="submit">Login</button>
+        </form>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
+
+</div>
+
+</body>
+</html>

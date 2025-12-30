@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
+import uuid
 
 app = Flask(__name__)
 
@@ -42,6 +43,7 @@ def login():
         user=User.query.filter_by(username=username, password=password).first()
         if user:
             session['user_id']=user.id
+            RoomMember.is_active=True
             return redirect(url_for('dashboard'))
         else:
             return "Invalid credentials"
@@ -73,11 +75,36 @@ def dashboard():
 def create_room():
     if request.method == 'POST':
         room_name = request.form['room_name']
+        created_by = User.query.get(session['user_id'])
+        room_code = str(uuid.uuid4())[:8]
+        new_room = ChatRoom(room_name=room_name, room_code=room_code, created_by=created_by.id)
+        db.session.add(new_room)
+        db.session.commit()
         return redirect(url_for('dashboard'))
     return render_template('/user/create_room.html')
-
+@app.route('/admin_login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == "POST":
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username, password=password, is_admin=True).first()
+        if user:
+            session['admin_id'] = user.id
+            return redirect(url_for('admin_dashboard'))
+        else:
+            return "Invalid admin credentials"
+    return render_template('/admin/admin_login.html')
+@app.route('/admin_dashboard')
+def admin_dashboard():
+    if 'admin_id' not in session:
+        return redirect(url_for('admin_login'))
+    users= User.query.all()
+    rooms = ChatRoom.query.all()
+    return render_template('/admin/admin_dashboard.html', rooms=rooms, users=users)
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
+    RoomMember.is_active=False
+    return redirect(url_for('home'))
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

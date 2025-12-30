@@ -3,6 +3,17 @@
 
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}">
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="nav-left">
+        <span class="logo">ChatApp</span>
+    </div>
+    <div class="nav-right">
+        <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+    </div>
+</nav>
+
 <div class="dashboard-container">
     <h1>Welcome, {{ user.username }}!</h1>
 
@@ -14,7 +25,7 @@
             <ul>
                 {% for room in rooms %}
                     <li>
-                        <span>{{ room.room_name }}</span>
+                        <span>#</span>
                         <a href="#">Join</a>
                     </li>
                 {% endfor %}
