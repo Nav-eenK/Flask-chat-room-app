@@ -1,0 +1,75 @@
+body {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    font-family: "Segoe UI", sans-serif;
+    color: #fff;
+    min-height: 100vh;
+}
+
+.dashboard-container {
+    max-width: 800px;
+    margin: 80px auto;
+    padding: 30px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 12px;
+    text-align: center;
+}
+
+.dashboard-container h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.dashboard-container a.btn {
+    display: inline-block;
+    margin: 15px 0;
+    padding: 12px 25px;
+    background: #fff;
+    color: #667eea;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.dashboard-container a.btn:hover {
+    background: #e0e0ff;
+}
+
+.rooms {
+    margin-top: 40px;
+    text-align: left;
+}
+
+.rooms h2 {
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+.rooms ul {
+    list-style: none;
+    padding: 0;
+}
+
+.rooms li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background: rgba(255,255,255,0.2);
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+.rooms li span {
+    font-weight: 600;
+}
+
+.rooms li a {
+    background: #fff;
+    color: #667eea;
+    padding: 5px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.rooms li a:hover {
+    background: #e0e0ff;
+}

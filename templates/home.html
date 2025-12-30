@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ChatApp - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="logo">ChatApp</div>
+    <ul class="nav-links">
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        <li><a href="{{ url_for('register') }}">Register</a></li>
+    </ul>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Welcome to ChatApp</h1>
+        <p>Connect, create rooms, and chat with friends in real time.</p>
+        <a href="{{ url_for('register') }}" class="btn">Get Started</a>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <div class="feature" data-delay="0">
+        <h2>Create Chat Rooms</h2>
+        <p>Easily create a chat room and share the link with friends.</p>
+    </div>
+    <div class="feature" data-delay="200">
+        <h2>Real-Time Messaging</h2>
+        <p>Chat instantly with your friends with no delays.</p>
+    </div>
+    <div class="feature" data-delay="400">
+        <h2>Admin Dashboard</h2>
+        <p>Admins can monitor users and rooms easily.</p>
+    </div>
+</section>
+
+<script>
+    // Animate features on scroll
+    const features = document.querySelectorAll('.feature');
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting){
+                entry.target.classList.add('show');
+            }
+        });
+    }, { threshold: 0.3 });
+
+    features.forEach(feature => observer.observe(feature));
+</script>
+
+</body>
+</html>
