@@ -6,7 +6,7 @@
 <div class="dashboard-container">
     <h1>Welcome, {{ user.username }}!</h1>
 
-    <a href="#" class="btn">Create New Room</a>
+    <a href="{{ url_for('create_room') }}" class="btn">Create New Room</a>
 
     <div class="rooms">
         <h2>Your Chat Rooms</h2>

@@ -13,6 +13,19 @@ class User(db.Model):
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
+    
+class ChatRoom(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    room_name = db.Column(db.String(100))
+    room_code = db.Column(db.String(10), unique=True)
+    created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
+    is_active = db.Column(db.Boolean, default=True)
+
+class RoomMember(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    room_id = db.Column(db.Integer, db.ForeignKey('chat_room.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    is_active = db.Column(db.Boolean, default=True)
 
 with app.app_context():
     db.create_all()
@@ -55,5 +68,16 @@ def dashboard():
         return redirect(url_for('login'))
     user=User.query.get(session['user_id'])
     return render_template('/user/dashboard.html', user=user)
+
+@app.route('/create_room', methods=['GET', 'POST'])
+def create_room():
+    if request.method == 'POST':
+        room_name = request.form['room_name']
+        return redirect(url_for('dashboard'))
+    return render_template('/user/create_room.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
