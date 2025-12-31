@@ -23,16 +23,5 @@ A simple real-time chat room web application built with **Flask** where users ca
 - Werkzeug (for password hashing)
 - HTML, CSS, Bootstrap (for frontend)
 
----
-
-## Live Demo
-
-| Feature | Try It |
-|---------|--------|
-| Chat Room App | [**Live Demo**](https://your-deployment-link.com) |
-
-> If the demo link is not available, run the app locally following the instructions below.
-
----
 
 
