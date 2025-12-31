@@ -25,8 +25,8 @@
             <ul>
                 {% for room in rooms %}
                     <li>
-                        <span>#</span>
-                        <a href="#">Join</a>
+                        <span>{{ room.room_name }}</span>
+                        <a href="{{ url_for('chat_room', room_code=room.room_code) }}">Join</a>
                     </li>
                 {% endfor %}
             </ul>

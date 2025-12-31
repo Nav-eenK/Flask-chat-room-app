@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Chat Room</title>
+    <title>{{ room.room_name }}</title>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+
     <style>
         body {
             margin: 0;
@@ -13,7 +16,6 @@
             background: #f4f6f8;
         }
 
-        /* Top bar */
         .top-bar {
             background: #1e293b;
             color: #fff;
@@ -30,7 +32,6 @@
             border-radius: 6px;
         }
 
-        /* Chat area */
         .chat-box {
             flex: 1;
             padding: 20px;
@@ -54,7 +55,19 @@
             border-radius: 10px;
         }
 
-        /* Bottom input */
+        .status {
+            font-size: 13px;
+            color: #555;
+            font-style: italic;
+            margin: 6px 0;
+        }
+
+        .typing {
+            font-size: 13px;
+            color: #666;
+            font-style: italic;
+        }
+
         .chat-input {
             display: flex;
             padding: 12px;
@@ -89,28 +102,85 @@
 </head>
 <body>
 
-    <!-- Top -->
+    <!-- TOP BAR -->
     <div class="top-bar">
-        <h3>Chat Room: {{ room.room_name }}</h3>
+        <h3>{{ room.room_name }}</h3>
         <div class="room-link">
-           Link: {{ request.host_url }}chat/{{ room.room_code }}
+            {{ request.host_url }}chat/{{ room.room_code }}
         </div>
     </div>
 
-    <!-- Messages -->
+    <!-- CHAT MESSAGES -->
     <div class="chat-box" id="chatBox">
-        <!-- Example message -->
+        {% for msg in messages %}
         <div class="message">
-            <span>User1</span>
-            <p>Hello everyone</p>
+            <span>{{ msg.username }}</span>
+            <p>{{ msg.content }}</p>
         </div>
+        {% endfor %}
     </div>
 
-    <!-- Bottom input -->
-    <form class="chat-input" method="POST">
-        <input type="text" name="message" placeholder="Type your message..." required>
+    <div class="typing" id="typing"></div>
+
+    <!-- INPUT -->
+    <form class="chat-input" id="chatForm">
+        <input type="text" id="messageInput" placeholder="Type your message..." required autocomplete="off">
         <button type="submit">Send</button>
     </form>
+
+<script>
+    const socket = io();
+
+    const room = "{{ room.room_code }}";
+    const username = "{{ session['username'] }}";
+
+    const chatBox = document.getElementById("chatBox");
+    const form = document.getElementById("chatForm");
+    const input = document.getElementById("messageInput");
+    const typingDiv = document.getElementById("typing");
+
+    socket.emit("join", { room: room, username: username });
+
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        if (input.value.trim() === "") return;
+
+        socket.emit("send_message", {
+            room: room,
+            message: input.value
+        });
+
+        input.value = "";
+    });
+
+    input.addEventListener("input", () => {
+        socket.emit("typing", { room: room, username: username });
+    });
+
+    socket.on("receive_message", data => {
+        chatBox.innerHTML += `
+            <div class="message">
+                <span>${data.username}</span>
+                <p>${data.message}</p>
+            </div>
+        `;
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    socket.on("status", data => {
+        chatBox.innerHTML += `<div class="status">${data.msg}</div>`;
+    });
+
+    socket.on("typing", data => {
+        typingDiv.innerText = `${data.username} is typing...`;
+        setTimeout(() => typingDiv.innerText = "", 1500);
+    });
+
+    window.addEventListener("beforeunload", () => {
+        socket.emit("leave", { room: room, username: username });
+    });
+</script>
+
 
 </body>
 </html>
