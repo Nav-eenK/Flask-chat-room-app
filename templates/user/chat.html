@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Room</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #f4f6f8;
+        }
+
+        /* Top bar */
+        .top-bar {
+            background: #1e293b;
+            color: #fff;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .room-link {
+            font-size: 14px;
+            background: #334155;
+            padding: 6px 10px;
+            border-radius: 6px;
+        }
+
+        /* Chat area */
+        .chat-box {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 12px;
+        }
+
+        .message span {
+            font-weight: bold;
+            color: #1e293b;
+        }
+
+        .message p {
+            margin: 4px 0 0;
+            background: #e5e7eb;
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 10px;
+        }
+
+        /* Bottom input */
+        .chat-input {
+            display: flex;
+            padding: 12px;
+            background: #ffffff;
+            border-top: 1px solid #ddd;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+        .chat-input button {
+            margin-left: 10px;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .chat-input button:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top -->
+    <div class="top-bar">
+        <h3>Chat Room: {{ room.room_name }}</h3>
+        <div class="room-link">
+           Link: {{ request.host_url }}chat/{{ room.room_code }}
+        </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="chat-box" id="chatBox">
+        <!-- Example message -->
+        <div class="message">
+            <span>User1</span>
+            <p>Hello everyone</p>
+        </div>
+    </div>
+
+    <!-- Bottom input -->
+    <form class="chat-input" method="POST">
+        <input type="text" name="message" placeholder="Type your message..." required>
+        <button type="submit">Send</button>
+    </form>
+
+</body>
+</html>

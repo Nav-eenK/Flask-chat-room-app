@@ -73,16 +73,37 @@ def dashboard():
 
 @app.route('/create_room', methods=['GET', 'POST'])
 def create_room():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
     if request.method == 'POST':
         room_name = request.form['room_name']
         created_by = User.query.get(session['user_id'])
+
         room_code = str(uuid.uuid4())[:8]
         new_room = ChatRoom(room_name=room_name, room_code=room_code, created_by=created_by.id)
+
         db.session.add(new_room)
         db.session.commit()
-        return redirect(url_for('dashboard'))
+
+        return redirect(url_for('chat_room', room_code=room_code))
+
     return render_template('/user/create_room.html')
-@app.route('/admin_login', methods=['GET', 'POST'])
+
+
+@app.route('/chat/<room_code>')
+def chat_room(room_code):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    room = ChatRoom.query.filter_by(room_code=room_code, is_active=True).first()
+    if not room:
+        return "Room not found or inactive"
+
+    return render_template('/user/chat.html', room=room)
+
+
+@app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == "POST":
         username = request.form['username']
